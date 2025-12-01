@@ -1,14 +1,12 @@
 <template>
   <div class="sidebar-inner">
-    <!-- HEADER SECTION -->
+   <!-- HEADER SECTION -->
     <div class="sidebar-header">
-      <div class="logo-section d-flex align-center pa-4">
-        <v-avatar size="30" color="white" class="mr-3">
-          <v-icon size="20" color="black">mdi-shield-account</v-icon>
-        </v-avatar>
-        <div v-if="!isRail" class="logo-content">
-          <div class="logo-text">Welcome Back!</div>
-        </div>
+      <div class="logo-section d-flex align-center pa-3">
+        <v-avatar size="32" class="mr-3">
+  <img :src="profileImg" alt="Admin Profile" />
+</v-avatar>
+        <span v-if="!isRail" class="logo-text">Welcome Admin!</span>
       </div>
     </div>
 
@@ -28,7 +26,7 @@
     Dashboard
   </v-tooltip>
           <template #prepend>
-            <v-icon class="menu-icon">mdi-view-dashboard</v-icon>
+            <v-icon class="menu-icon" size="25">mdi-view-dashboard</v-icon>
           </template>
           <v-list-item-title v-if="!isRail" class="menu-text">Dashboard</v-list-item-title>
         </v-list-item>
@@ -43,7 +41,7 @@
     Security Management
   </v-tooltip>
             <template #prepend>
-              <v-icon class="menu-icon">mdi-shield-account</v-icon>
+              <v-icon class="menu-icon" size="25">mdi-shield-account</v-icon>
             </template>
             <v-list-item-title v-if="!isRail" class="menu-text">Security Management</v-list-item-title>
             <template #append v-if="!isRail">
@@ -81,7 +79,7 @@
     Threat Intelligence
   </v-tooltip>
             <template #prepend>
-              <v-icon class="menu-icon">mdi-radar</v-icon>
+              <v-icon class="menu-icon" size="25">mdi-radar</v-icon>
             </template>
             <v-list-item-title v-if="!isRail" class="menu-text">Threat Intelligence</v-list-item-title>
             <template #append v-if="!isRail">
@@ -119,7 +117,7 @@
     Compliance & Reporting
   </v-tooltip>
             <template #prepend>
-              <v-icon class="menu-icon">mdi-file-document-check</v-icon>
+              <v-icon class="menu-icon" size="25">mdi-file-document-check</v-icon>
             </template>
             <v-list-item-title v-if="!isRail" class="menu-text">Compliance</v-list-item-title>
             <template #append v-if="!isRail">
@@ -157,7 +155,7 @@
     Settings
   </v-tooltip>
           <template #prepend>
-            <v-icon class="menu-icon">mdi-cog</v-icon>
+            <v-icon class="menu-icon" size="25">mdi-cog</v-icon>
           </template>
           <v-list-item-title v-if="!isRail" class="menu-text">Settings</v-list-item-title>
         </v-list-item>
@@ -182,6 +180,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import profileImg from '../assets/Profile.png'
 
 const route = useRoute()
 
@@ -241,7 +240,7 @@ watch(() => props.isRail, (newVal) => {
 .sidebar-inner {
   height: 100%;
   background: #323130;
-  border-right: 1px solid #484644;
+  border-right: 2px solid #484644;
   display: flex;
   flex-direction: column;
 }
@@ -280,7 +279,7 @@ watch(() => props.isRail, (newVal) => {
 .navigation-section {
   flex: 1;
   overflow-y: auto;
-  padding: 10px 0;
+  padding: 0px 0;
   background: #212121;
 }
 
@@ -290,7 +289,7 @@ watch(() => props.isRail, (newVal) => {
 
 /* Menu Sections */
 .menu-section {
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 }
 
 /* Main Menu Items */
@@ -298,7 +297,7 @@ watch(() => props.isRail, (newVal) => {
   border-radius: 0;
   margin: 0;
   min-height: 44px;
-  padding: 0 16px;
+  padding: 16px;
   transition: background-color 0.2s ease;
 }
 
@@ -325,7 +324,7 @@ watch(() => props.isRail, (newVal) => {
   border-radius: 0;
   margin: 0;
   min-height: 44px;
-  padding: 0 16px;
+  padding: 13px;
   transition: background-color 0.2s ease;
   cursor: pointer;
 }
@@ -340,7 +339,7 @@ watch(() => props.isRail, (newVal) => {
 
 .menu-icon {
   color: rgba(255, 255, 255, 0.8) !important;
-  margin-right: -20px;
+  margin-right: -25px;
   font-size: 20px;
   transition: color 0.2s ease;
 }
@@ -527,5 +526,13 @@ watch(() => props.isRail, (newVal) => {
   height: 100%;
   width: 2px;
   background: rgba(255, 255, 255, 0.3);
+}
+
+.v-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* keeps proportions, crops if needed */
+  border-radius: 50%;  /* ensures circular fit */
+  display: block;
 }
 </style>

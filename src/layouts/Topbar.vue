@@ -8,19 +8,12 @@
         @click="$emit('toggle-drawer')"
         class="menu-btn mr-2"
       >
-        <v-icon color="white" size="25">mdi-menu</v-icon>
+        <v-icon color="white" size="25" class="mr-0">mdi-menu</v-icon>
       </v-btn>
 
       <div class="brand-wrapper">
-        <v-avatar size="35" color="white" class="mr-5 brand-avatar">
-          <v-icon size="20" color="black">mdi-shield-check</v-icon>
-        </v-avatar>
-        <div>
-          <div class="brand-title">EigenSecure</div>
-          <div class="brand-subtitle">Enterprise Security Platform</div>
-        </div>
+  <img :src="syngentaLogo" alt="Syngenta Logo" class="brand-logo" /> </div>
       </div>
-    </div>
 
     <!-- CENTER: PRIMARY NAVIGATION -->
     <div class="primary-nav-section">
@@ -109,8 +102,8 @@
               v-bind="props"
             >
               <v-avatar size="36" class="mr-2">
-                <img src="https://avatars.githubusercontent.com/u/9919?v=4" alt="Admin Profile" />
-              </v-avatar>
+  <img :src="profileImg" alt="Admin Profile" />
+</v-avatar>
               <div class="user-info">
                 <div class="user-name">Security Admin</div>
                 <div class="user-role">Administrator</div>
@@ -224,6 +217,9 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
+import syngentaLogo from '../assets/Logo-2.png'
+import profileImg from '../assets/Profile.png' 
+
 
 const router = useRouter()
 
@@ -548,5 +544,21 @@ const refreshData = () => {
 
 :deep(.profile-menu .v-icon) {
   color: #605e5c !important;
+}
+
+.brand-logo {
+  height: 55px;          
+  width: auto;           
+  object-fit: contain;   
+  display: block;
+  margin-left: -10px; 
+}    
+
+.v-avatar img {
+  width: 100%;          
+  height: 100%;        
+  object-fit: cover;    
+  border-radius: 50%;   
+  display: block;     
 }
 </style>
