@@ -73,10 +73,10 @@
 
     <!-- MAIN CONTENT -->
     <v-main class="portal-main">
-      <v-container fluid class="main-container">
-        <router-view />
-      </v-container>
-    </v-main>
+  <router-view v-slot="{ Component }">
+    <component :is="Component || ComingSoon" />
+  </router-view>
+</v-main>
   </v-app>
 </template>
 
@@ -85,13 +85,15 @@ import { ref, computed } from 'vue'
 import Topbar from './Topbar.vue'
 import Sidebar from './Sidebar.vue'
 import bus from '../styles/eventBus'
+import ComingSoon from '../views/ComingSoon.vue'
 
-// ✅ Shared sidebar state
+
+// Shared sidebar state
 const drawer = ref(true)
 const isRail = ref(true)
 const pinned = ref(false)
 
-// ✅ Shared notifications state
+// Shared notifications state
 const notifyDrawer = ref(false)
 const notifications = ref([])
 
@@ -158,7 +160,7 @@ const getNotificationIcon = (type) => {
 
 <style scoped>
 .portal-main {
-  background: #000000;
+  background: #f5f5f5;
   min-height: 100vh;
 }
 

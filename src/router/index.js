@@ -14,7 +14,16 @@ const routes = [
   { path: '/resources', name: 'Resources', component: Resources },
   { path: '/create-resource', name: 'CreateResource', component: CreateResource },
   { path: '/settings', name: 'Settings', component: Settings },
-  { path: '/user/:id', name: 'UserDetail', component: UserDetail }  // ✅ Correct file used
+  { path: '/user/:id', name: 'UserDetail', component: UserDetail },  // ✅ Correct file used
+  {
+  path: '/pages/client-side',
+  component: () => import('@/views/ClientSidePage.vue')
+},
+{
+  path: '/pages/server-side',
+  component: () => import('@/views/ServerSidePage.vue')
+}
+
 ]
 
 const router = createRouter({

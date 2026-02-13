@@ -9,8 +9,8 @@
         <v-col cols="12" md="3" v-for="s in stats" :key="s.label">
           <div class="stat-box">
             <v-icon size="28" :color="s.color">{{ s.icon }}</v-icon>
-            <div class="stat-value">{{ s.value }}</div>
-            <div class="stat-label">{{ s.label }}</div>
+            <div class="flat-value">{{ f.value }}</div>
+            <div class="flat-label">{{ f.label }}</div>
           </div>
         </v-col>
       </v-row>
@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-const stats = [
+const stat = [
   { label: "Users", value: "7", icon: "mdi-account-group", color: "#0078D4" },
   { label: "Pages", value: "10", icon: "mdi-file-document-outline", color: "#4CAF50" },
   { label: "Sessions", value: "20", icon: "mdi-timer-sand", color: "#673AB7" },

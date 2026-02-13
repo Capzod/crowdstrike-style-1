@@ -145,6 +145,52 @@
           </transition>
         </div>
 
+        <!-- Pages -->
+<div class="menu-section">
+  <v-list-item
+    class="menu-header"
+    @click="toggleSection('pages')"
+  >
+    <v-tooltip activator="parent" location="right" open-delay="100">
+      Pages
+    </v-tooltip>
+
+    <template #prepend>
+      <v-icon class="menu-icon" size="25">mdi-file-multiple</v-icon>
+    </template>
+
+    <v-list-item-title v-if="!isRail" class="menu-text">
+      Pages
+    </v-list-item-title>
+
+    <template #append v-if="!isRail">
+      <v-icon class="chevron" :class="{ rotated: expandedSection === 'pages' }">
+        mdi-chevron-down
+      </v-icon>
+    </template>
+  </v-list-item>
+
+  <transition name="slide" v-if="!isRail">
+    <div v-if="expandedSection === 'pages'" class="submenu">
+      <v-list-item
+        v-for="item in pagesItems"
+        :key="item.route"
+        :to="item.route"
+        class="submenu-item"
+        active-class="submenu-active"
+      >
+        <template #prepend>
+          <v-icon class="submenu-icon">{{ item.icon }}</v-icon>
+        </template>
+        <v-list-item-title class="submenu-text">
+          {{ item.label }}
+        </v-list-item-title>
+      </v-list-item>
+    </div>
+  </transition>
+</div>
+
+
         <!-- Settings -->
         <v-list-item
           to="/settings"
@@ -211,6 +257,12 @@ const complianceItems = [
   { label: 'Standards', route: '/compliance/standards', icon: 'mdi-certificate' }
 ]
 
+const pagesItems = [
+  { label: 'Client Side Page', route: '/pages/client-side', icon: 'mdi-monitor' },
+  { label: 'Server Side Page', route: '/pages/server-side', icon: 'mdi-server-network' }
+]
+
+
 const toggleSection = (section) => {
   expandedSection.value = expandedSection.value === section ? '' : section
 }
@@ -224,10 +276,13 @@ watch(() => route.path, (newPath) => {
     expandedSection.value = 'threats'
   } else if (newPath.includes('/compliance')) {
     expandedSection.value = 'compliance'
+  } else if (newPath.includes('/pages')) {
+    expandedSection.value = 'pages'
   } else if (newPath === '/') {
     expandedSection.value = ''
   }
 }, { immediate: true })
+
 
 watch(() => props.isRail, (newVal) => {
   if (newVal) {
