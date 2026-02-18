@@ -2,7 +2,7 @@
   <v-app class="security-dashboard">
     <v-main>
       <v-container fluid class="pa-3">
-        <!-- Two-column layout with toggle - reduced size by 20% -->
+        <!-- Two-column layout -->
         <div class="layout-wrapper" :class="{ 'nav-collapsed': !isLeftNavExpanded }">
           
           <!-- LEFT SIDEBAR -->
@@ -142,7 +142,7 @@
               </v-card>
             </template>
 
-            <!-- Collapsed Sidebar - Azure Style -->
+            <!-- Collapsed Sidebar -->
 <template v-else>
   <div class="collapsed-sidebar">
     <!-- Hover trigger area -->

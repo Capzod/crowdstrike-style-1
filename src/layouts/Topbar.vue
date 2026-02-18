@@ -11,69 +11,22 @@
         <v-icon color="white" size="25" class="mr-0">mdi-menu</v-icon>
       </v-btn>
 
-      <div class="brand-wrapper">
-  <img :src="syngentaLogo" alt="Syngenta Logo" class="brand-logo" /> </div>
+      <div class="brand-wrapper" @click="goToHome">
+        <img :src="syngentaLogo" alt="Syngenta Logo" class="brand-logo" />
       </div>
-
-    <!-- CENTER: PRIMARY NAVIGATION -->
-    <div class="primary-nav-section">
-      <v-tabs v-model="activeTab" color="#0078d4" class="primary-tabs">
-        <v-tab 
-          v-for="item in navItems" 
-          :key="item.name"
-          :value="item.route"
-          @click="router.push(item.route)"
-          class="primary-tab"
-        >
-          <v-icon size="18" class="mr-2">{{ item.icon }}</v-icon>
-          {{ item.name }}
-          <v-badge 
-            v-if="item.badge" 
-            :content="item.badge" 
-            color="#d13438" 
-            inline 
-            class="ml-2 nav-badge"
-          ></v-badge>
-        </v-tab>
-      </v-tabs>
     </div>
 
     <!-- RIGHT: ACTIONS & PROFILE -->
     <div class="d-flex align-center action-section">
-      <!-- QUICK ACTIONS -->
-      <div class="quick-actions">
-        <v-btn 
-          variant="outlined" 
-          size="small" 
-          color="#0078d4"
-          class="quick-action-btn"
-          @click="handleNewCase"
-        >
-          <v-icon size="18" class="mr-1">mdi-plus</v-icon>
-          New Case
-        </v-btn>
-        <v-btn 
-          variant="outlined" 
-          size="small" 
-          color="#0078d4"
-          class="quick-action-btn ml-2"
-        >
-          <v-icon size="18" class="mr-1">mdi-download</v-icon>
-          Export
-        </v-btn>
-      </div>
-
-      <v-divider vertical class="mx-4 divider" />
-
-      <!-- SEARCH -->
-      <v-text-field
-        density="compact"
-        variant="outlined"
-        placeholder="Search threats, endpoints..."
-        prepend-inner-icon="mdi-magnify"
-        hide-details
-        class="search-field"
-      ></v-text-field>
+      <!-- SEARCH BUTTON -->
+      <v-btn 
+        icon 
+        variant="text" 
+        class="search-btn mr-4"
+        @click="handleSearch"
+      >
+        <v-icon color="white" size="24">mdi-magnify</v-icon>
+      </v-btn>
 
       <!-- NOTIFICATIONS & PROFILE -->
       <div class="user-actions">
@@ -102,8 +55,8 @@
               v-bind="props"
             >
               <v-avatar size="36" class="mr-2">
-  <img :src="profileImg" alt="Admin Profile" />
-</v-avatar>
+                <img :src="profileImg" alt="Admin Profile" />
+              </v-avatar>
               <div class="user-info">
                 <div class="user-name">Security Admin</div>
                 <div class="user-role">Administrator</div>
@@ -156,50 +109,13 @@ const handleLogout = () => {
   router.push('/login')
 }
 
-const handleNewCase = () => {
-  console.log('Creating new case...')
+const handleSearch = () => {
+  console.log('Search clicked')
+  // Add your search functionality here
 }
 
-// Navigation
-const activeTab = ref('/')
-const navItems = ref([
-  { name: 'Dashboard', route: '/', icon: 'mdi-view-dashboard', badge: null },
-  { name: 'Assets', route: '/assets', icon: 'mdi-server', badge: '12' },
-  { name: 'Security Posture', route: '/posture', icon: 'mdi-shield-check', badge: '3' },
-  { name: 'Threat Detection', route: '/detections', icon: 'mdi-radar', badge: '24' },
-  { name: 'Vulnerabilities', route: '/vulnerabilities', icon: 'mdi-bug-outline', badge: '8' },
-  { name: 'Compliance', route: '/compliance', icon: 'mdi-file-document-check', badge: null }
-])
-
-// Filters
-const selectedTimeFilter = ref('24h')
-const timeFilters = ref([
-  { label: 'Last 1 Hour', value: '1h' },
-  { label: 'Last 6 Hours', value: '6h' },
-  { label: 'Last 24 Hours', value: '24h' },
-  { label: 'Last 7 Days', value: '7d' },
-  { label: 'Last 30 Days', value: '30d' }
-])
-
-const viewType = ref('overview')
-const quickFilters = ref([
-  { label: 'Critical', active: true },
-  { label: 'Active', active: false },
-  { label: 'Unresolved', active: true }
-])
-
-// Methods
-const getTimeFilterLabel = (value) => {
-  const filter = timeFilters.value.find(f => f.value === value)
-  return filter ? filter.label : 'Last 24 Hours'
-}
-
-const toggleFilter = (filter) => {
-  filter.active = !filter.active
-}
-
-const refreshData = () => {
-  console.log('Refreshing data...')
+const goToHome = () => {
+  router.push('/')
 }
 </script>
 
@@ -209,7 +125,7 @@ const refreshData = () => {
   color: white !important;
   border-bottom: 1px solid #000000 !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
-  padding: 0 24px;
+  padding: 0 12px;
 }
 
 /* Brand Section */
@@ -220,92 +136,36 @@ const refreshData = () => {
 .brand-wrapper {
   display: flex;
   align-items: center;
+  cursor: pointer; /* Add pointer cursor to indicate it's clickable */
 }
 
-.brand-avatar {
-  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+.brand-wrapper:hover {
+  opacity: 0.8; /* Optional: Add a slight hover effect */
 }
 
-.brand-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #ffffff;
-  line-height: 1.2;
-}
-
-.brand-subtitle {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.2;
-  font-weight: 400;
-}
-
-/* Primary Navigation */
-.primary-nav-section {
-  flex: 1;
-  max-width: 600px;
-  margin: 0 40px;
-}
-
-.primary-tabs {
-  height: 100%;
-}
-
-.primary-tab {
-  font-size: 14px;
-  font-weight: 500;
-  text-transform: none;
-  min-width: auto;
-  padding: 0 20px;
-  color: rgba(255, 255, 255, 0.8) !important;
-  height: 100%;
-  border-radius: 0;
-}
-
-.primary-tab:hover {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.1);
+.brand-logo {
+  height: 55px;          
+  width: auto;           
+  object-fit: contain;   
+  display: block;
+  margin-left: -10px; 
 }
 
 /* Action Section */
 .action-section {
-  min-width: 480px;
+  flex: 1;
   justify-content: flex-end;
-}
-
-.quick-actions {
   display: flex;
   align-items: center;
 }
 
-.quick-action-btn {
-  border-color: rgba(255, 255, 255, 0.3) !important;
+.search-btn {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.search-btn:hover {
   color: white !important;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.divider {
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  height: 24px;
-}
-
-.search-field {
-  width: 280px;
-  margin: 0 16px;
-}
-
-.search-field :deep(.v-field__outline) {
-  color: rgba(255, 255, 255, 0.3) !important;
-}
-
-.search-field :deep(.v-field__input) {
-  color: white !important;
-  font-size: 14px;
-}
-
-.search-field :deep(.v-field__prepend-inner) {
-  color: rgba(255, 255, 255, 0.7) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .user-actions {
@@ -356,89 +216,7 @@ const refreshData = () => {
   background: white !important;
 }
 
-/* Secondary Navigation Bar */
-.secondary-nav-bar {
-  background: #212121;
-  border-bottom: 0px solid #484644;
-  padding: 0px 0px;
-}
-
-.secondary-nav-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 100%;
-}
-
-.filters-section {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.filters-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: white;
-}
-
-.view-toggle {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-}
-
-.view-btn {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9) !important;
-}
-
-.time-filter-btn {
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  color: white !important;
-  font-size: 13px;
-}
-
-.quick-filters-section {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.quick-filter-chip {
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-}
-
-.refresh-btn {
-  font-size: 13px;
-  font-weight: 500;
-  color: white !important;
-}
-
 /* Active States */
-:deep(.v-tab--selected) {
-  color: white !important;
-  font-weight: 600;
-}
-
-:deep(.v-tab__slider) {
-  color: white !important;
-}
-
-:deep(.v-btn--selected) {
-  background: rgba(255, 255, 255, 0.2) !important;
-  color: white !important;
-}
-
-:deep(.v-badge__badge) {
-  font-size: 10px;
-  font-weight: 600;
-}
-
 .menu-btn {
   color: rgba(255, 255, 255, 0.8) !important;
 }
@@ -450,15 +228,11 @@ const refreshData = () => {
 
 :deep(.v-avatar img) {
   border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Badge styling */
-.badge :deep(.v-badge__badge) {
-  font-size: 10px;
-  font-weight: 600;
-  height: 16px;
-  min-width: 16px;
-  background: #e81123 !important;
+  width: 100%;          
+  height: 100%;        
+  object-fit: cover;    
+  border-radius: 50%;   
+  display: block;
 }
 
 /* Profile menu text colors */
@@ -470,19 +244,8 @@ const refreshData = () => {
   color: #605e5c !important;
 }
 
-.brand-logo {
-  height: 55px;          
-  width: auto;           
-  object-fit: contain;   
-  display: block;
-  margin-left: -10px; 
-}    
-
-.v-avatar img {
-  width: 100%;          
-  height: 100%;        
-  object-fit: cover;    
-  border-radius: 50%;   
-  display: block;     
+:deep(.v-badge__badge) {
+  font-size: 10px;
+  font-weight: 600;
 }
 </style>

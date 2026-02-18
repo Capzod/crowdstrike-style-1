@@ -2,7 +2,7 @@
   <div class="sidebar-inner">
     <!-- HEADER SECTION -->
     <div class="sidebar-header">
-      <div class="logo-section d-flex align-center pa-3">
+      <div class="logo-section d-flex align-center pa-4">
         <v-avatar size="32" class="mr-3">
           <img :src="profileImg" alt="Admin Profile" />
         </v-avatar>

@@ -114,7 +114,7 @@
 import { ref, computed, onMounted } from 'vue'
 import Topbar from './Topbar.vue'
 import Sidebar from './Sidebar.vue'
-import SubSidebar from './SubSidebar.vue' // Import the new SubSidebar
+import SubSidebar from './SubSidebar.vue' // SubSidebar
 import bus from '../styles/eventBus'
 import ComingSoon from '../views/ComingSoon.vue'
 
