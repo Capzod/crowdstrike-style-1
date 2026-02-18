@@ -12,7 +12,6 @@
     //redirectUri: import.meta.env.VITE_REDIRECT_URI,
     // postLogoutRedirectUri: import.meta.env.VITE_REDIRECT_URI
  },
- 
  cache: {
  cacheLocation: 'sessionStorage', // This configures where your cache will be stored
  storeAuthStateInCookie: false
