@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat height="75" class="portal-topbar">
+  <v-app-bar app flat height="75" class="portal-topbar">
     <!-- LEFT: BRAND & NAVIGATION -->
     <div class="d-flex align-center brand-section">
       <v-btn 

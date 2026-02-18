@@ -19,6 +19,7 @@
 <style scoped>
 .coming-soon-wrapper {
   height: 80vh;
+  width: 200vh;
   display: flex;
   align-items: center;
   justify-content: center;

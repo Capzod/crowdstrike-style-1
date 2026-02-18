@@ -1,205 +1,129 @@
 <template>
   <div class="sidebar-inner">
-   <!-- HEADER SECTION -->
+    <!-- HEADER SECTION -->
     <div class="sidebar-header">
       <div class="logo-section d-flex align-center pa-3">
         <v-avatar size="32" class="mr-3">
-  <img :src="profileImg" alt="Admin Profile" />
-</v-avatar>
+          <img :src="profileImg" alt="Admin Profile" />
+        </v-avatar>
         <span v-if="!isRail" class="logo-text">Welcome Admin!</span>
       </div>
     </div>
 
     <v-divider class="sidebar-divider" />
 
-    <!-- CLEAN NAVIGATION MENU -->
+    <!-- NAVIGATION MENU -->
     <div class="navigation-section">
       <v-list density="compact" nav class="sidebar-menu">
         
-        <!-- Dashboard -->
+        <!-- Dashboard (no submenu) -->
         <v-list-item
           to="/"
           class="menu-item"
           active-class="menu-active"
         >
-        <v-tooltip activator="parent" location="right" open-delay="100">
-    Dashboard
-  </v-tooltip>
+          <v-tooltip activator="parent" location="right" open-delay="100">
+            Dashboard
+          </v-tooltip>
           <template #prepend>
             <v-icon class="menu-icon" size="25">mdi-view-dashboard</v-icon>
           </template>
           <v-list-item-title v-if="!isRail" class="menu-text">Dashboard</v-list-item-title>
         </v-list-item>
 
-        <!-- Security Management Section -->
+        <!-- Security Management Section (with submenu) -->
         <div class="menu-section">
           <v-list-item
             class="menu-header"
-            @click="toggleSection('security')"
+            :class="{ 'menu-active': activeSubMenu === 'security' }"
+            @click="openSubsidebar('security')"
           >
-          <v-tooltip activator="parent" location="right" open-delay="100">
-    Security Management
-  </v-tooltip>
+            <v-tooltip activator="parent" location="right" open-delay="100">
+              Security Management
+            </v-tooltip>
             <template #prepend>
               <v-icon class="menu-icon" size="25">mdi-shield-account</v-icon>
             </template>
             <v-list-item-title v-if="!isRail" class="menu-text">Security Management</v-list-item-title>
+            
+            <!-- Right arrow icon to tease subsidebar (always visible in full mode) -->
             <template #append v-if="!isRail">
-              <v-icon class="chevron" :class="{ rotated: expandedSection === 'security' }">
-                mdi-chevron-down
-              </v-icon>
+              <v-icon class="submenu-arrow" size="18">mdi-chevron-right</v-icon>
             </template>
           </v-list-item>
 
-          <transition name="slide" v-if="!isRail">
-            <div v-if="expandedSection === 'security'" class="submenu">
-              <v-list-item
-                v-for="item in securityItems"
-                :key="item.route"
-                :to="item.route"
-                class="submenu-item"
-                active-class="submenu-active"
-              >
-                <template #prepend>
-                  <v-icon class="submenu-icon">{{ item.icon }}</v-icon>
-                </template>
-                <v-list-item-title class="submenu-text">{{ item.label }}</v-list-item-title>
-              </v-list-item>
-            </div>
-          </transition>
+          <!-- REMOVED the inline submenu - now handled by SubSidebar -->
         </div>
 
-        <!-- Threat Intelligence -->
+        <!-- Threat Intelligence Section (with submenu) -->
         <div class="menu-section">
           <v-list-item
             class="menu-header"
-            @click="toggleSection('threats')"
+            :class="{ 'menu-active': activeSubMenu === 'threats' }"
+            @click="openSubsidebar('threats')"
           >
-          <v-tooltip activator="parent" location="right" open-delay="100">
-    Threat Intelligence
-  </v-tooltip>
+            <v-tooltip activator="parent" location="right" open-delay="100">
+              Threat Intelligence
+            </v-tooltip>
             <template #prepend>
               <v-icon class="menu-icon" size="25">mdi-radar</v-icon>
             </template>
             <v-list-item-title v-if="!isRail" class="menu-text">Threat Intelligence</v-list-item-title>
             <template #append v-if="!isRail">
-              <v-icon class="chevron" :class="{ rotated: expandedSection === 'threats' }">
-                mdi-chevron-down
-              </v-icon>
+              <v-icon class="submenu-arrow" size="18">mdi-chevron-right</v-icon>
             </template>
           </v-list-item>
-
-          <transition name="slide" v-if="!isRail">
-            <div v-if="expandedSection === 'threats'" class="submenu">
-              <v-list-item
-                v-for="item in threatItems"
-                :key="item.route"
-                :to="item.route"
-                class="submenu-item"
-                active-class="submenu-active"
-              >
-                <template #prepend>
-                  <v-icon class="submenu-icon">{{ item.icon }}</v-icon>
-                </template>
-                <v-list-item-title class="submenu-text">{{ item.label }}</v-list-item-title>
-              </v-list-item>
-            </div>
-          </transition>
         </div>
 
-        <!-- Compliance & Reporting -->
+        <!-- Compliance Section (with submenu) -->
         <div class="menu-section">
           <v-list-item
             class="menu-header"
-            @click="toggleSection('compliance')"
+            :class="{ 'menu-active': activeSubMenu === 'compliance' }"
+            @click="openSubsidebar('compliance')"
           >
-          <v-tooltip activator="parent" location="right" open-delay="100">
-    Compliance & Reporting
-  </v-tooltip>
+            <v-tooltip activator="parent" location="right" open-delay="100">
+              Compliance & Reporting
+            </v-tooltip>
             <template #prepend>
               <v-icon class="menu-icon" size="25">mdi-file-document-check</v-icon>
             </template>
             <v-list-item-title v-if="!isRail" class="menu-text">Compliance</v-list-item-title>
             <template #append v-if="!isRail">
-              <v-icon class="chevron" :class="{ rotated: expandedSection === 'compliance' }">
-                mdi-chevron-down
-              </v-icon>
+              <v-icon class="submenu-arrow" size="18">mdi-chevron-right</v-icon>
             </template>
           </v-list-item>
-
-          <transition name="slide" v-if="!isRail">
-            <div v-if="expandedSection === 'compliance'" class="submenu">
-              <v-list-item
-                v-for="item in complianceItems"
-                :key="item.route"
-                :to="item.route"
-                class="submenu-item"
-                active-class="submenu-active"
-              >
-                <template #prepend>
-                  <v-icon class="submenu-icon">{{ item.icon }}</v-icon>
-                </template>
-                <v-list-item-title class="submenu-text">{{ item.label }}</v-list-item-title>
-              </v-list-item>
-            </div>
-          </transition>
         </div>
 
-        <!-- Pages -->
-<div class="menu-section">
-  <v-list-item
-    class="menu-header"
-    @click="toggleSection('pages')"
-  >
-    <v-tooltip activator="parent" location="right" open-delay="100">
-      Pages
-    </v-tooltip>
+        <!-- Pages Section (with submenu) -->
+        <div class="menu-section">
+          <v-list-item
+            class="menu-header"
+            :class="{ 'menu-active': activeSubMenu === 'pages' }"
+            @click="openSubsidebar('pages')"
+          >
+            <v-tooltip activator="parent" location="right" open-delay="100">
+              Pages
+            </v-tooltip>
+            <template #prepend>
+              <v-icon class="menu-icon" size="25">mdi-file-multiple</v-icon>
+            </template>
+            <v-list-item-title v-if="!isRail" class="menu-text">Pages</v-list-item-title>
+            <template #append v-if="!isRail">
+              <v-icon class="submenu-arrow" size="18">mdi-chevron-right</v-icon>
+            </template>
+          </v-list-item>
+        </div>
 
-    <template #prepend>
-      <v-icon class="menu-icon" size="25">mdi-file-multiple</v-icon>
-    </template>
-
-    <v-list-item-title v-if="!isRail" class="menu-text">
-      Pages
-    </v-list-item-title>
-
-    <template #append v-if="!isRail">
-      <v-icon class="chevron" :class="{ rotated: expandedSection === 'pages' }">
-        mdi-chevron-down
-      </v-icon>
-    </template>
-  </v-list-item>
-
-  <transition name="slide" v-if="!isRail">
-    <div v-if="expandedSection === 'pages'" class="submenu">
-      <v-list-item
-        v-for="item in pagesItems"
-        :key="item.route"
-        :to="item.route"
-        class="submenu-item"
-        active-class="submenu-active"
-      >
-        <template #prepend>
-          <v-icon class="submenu-icon">{{ item.icon }}</v-icon>
-        </template>
-        <v-list-item-title class="submenu-text">
-          {{ item.label }}
-        </v-list-item-title>
-      </v-list-item>
-    </div>
-  </transition>
-</div>
-
-
-        <!-- Settings -->
+        <!-- Settings (no submenu) -->
         <v-list-item
           to="/settings"
           class="menu-item"
           active-class="menu-active"
         >
-        <v-tooltip activator="parent" location="right" open-delay="100">
-    Settings
-  </v-tooltip>
+          <v-tooltip activator="parent" location="right" open-delay="100">
+            Settings
+          </v-tooltip>
           <template #prepend>
             <v-icon class="menu-icon" size="25">mdi-cog</v-icon>
           </template>
@@ -234,11 +158,15 @@ const props = defineProps({
   isRail: { type: Boolean, default: false }
 })
 
-const expandedSection = ref('')
+const emit = defineEmits(['show-submenu', 'close-subsidebar'])
 
+// Track which submenu is active (for highlighting)
+const activeSubMenu = ref('')
+
+// Menu items data (kept for reference but submenu is handled by SubSidebar)
 const securityItems = [
-  { label: 'Asset Inventory', route: '/security/assets', icon: 'mdi-server' },
-  { label: 'Vulnerability Management', route: '/security/vulnerabilities', icon: 'mdi-bug-outline' },
+  { label: 'Asset Inventory', route: '/page', icon: 'mdi-server' },
+  { label: 'Vulnerability Management', route: '/groups', icon: 'mdi-bug-outline' },
   { label: 'Security Policies', route: '/security/policies', icon: 'mdi-shield-check' },
   { label: 'Access Control', route: '/security/access', icon: 'mdi-key-chain' }
 ]
@@ -262,33 +190,29 @@ const pagesItems = [
   { label: 'Server Side Page', route: '/pages/server-side', icon: 'mdi-server-network' }
 ]
 
-
-const toggleSection = (section) => {
-  expandedSection.value = expandedSection.value === section ? '' : section
+// Open subsidebar
+const openSubsidebar = (menuType) => {
+  activeSubMenu.value = menuType
+  emit('show-submenu', menuType)
 }
 
+// Watch route to update active submenu based on URL
 watch(() => route.path, (newPath) => {
-  if (props.isRail) return
-  
   if (newPath.includes('/security')) {
-    expandedSection.value = 'security'
+    activeSubMenu.value = 'security'
   } else if (newPath.includes('/threats')) {
-    expandedSection.value = 'threats'
+    activeSubMenu.value = 'threats'
   } else if (newPath.includes('/compliance')) {
-    expandedSection.value = 'compliance'
+    activeSubMenu.value = 'compliance'
   } else if (newPath.includes('/pages')) {
-    expandedSection.value = 'pages'
-  } else if (newPath === '/') {
-    expandedSection.value = ''
+    activeSubMenu.value = 'pages'
+  } else {
+    activeSubMenu.value = ''
   }
 }, { immediate: true })
 
-
-watch(() => props.isRail, (newVal) => {
-  if (newVal) {
-    expandedSection.value = ''
-  }
-})
+// Listen for subsidebar close event (from parent)
+// This would be handled by parent via prop/event
 </script>
 
 <style scoped>
@@ -309,20 +233,10 @@ watch(() => props.isRail, (newVal) => {
   min-height: 80px;
 }
 
-.logo-content {
-  line-height: 1.2;
-}
-
 .logo-text {
   font-size: 18px;
   font-weight: 600;
   color: #ffffff;
-}
-
-.logo-subtitle {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 400;
 }
 
 .sidebar-divider {
@@ -347,7 +261,7 @@ watch(() => props.isRail, (newVal) => {
   margin-bottom: 7px;
 }
 
-/* Main Menu Items */
+/* Main Menu Items (no submenu) */
 .menu-item {
   border-radius: 0;
   margin: 0;
@@ -365,16 +279,12 @@ watch(() => props.isRail, (newVal) => {
   border-right: 2px solid #ffffff;
 }
 
-.menu-active .menu-icon {
-  color: #ffffff !important;
-}
-
+.menu-active .menu-icon,
 .menu-active .menu-text {
   color: #ffffff !important;
-  font-weight: 600;
 }
 
-/* Menu Headers */
+/* Menu Headers (with submenu) */
 .menu-header {
   border-radius: 0;
   margin: 0;
@@ -392,6 +302,11 @@ watch(() => props.isRail, (newVal) => {
   color: #ffffff !important;
 }
 
+.menu-header:hover .submenu-arrow {
+  color: #ffffff !important;
+  transform: translateX(2px);
+}
+
 .menu-icon {
   color: rgba(255, 255, 255, 0.8) !important;
   margin-right: -25px;
@@ -405,83 +320,28 @@ watch(() => props.isRail, (newVal) => {
   color: #ffffff !important;
 }
 
-.chevron {
-  color: rgba(255, 255, 255, 0.8);
-  transition: transform 0.2s ease;
+/* Right arrow for submenu teaser */
+.submenu-arrow {
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
   font-size: 18px;
 }
 
-.chevron.rotated {
-  transform: rotate(180deg);
+.menu-header:hover .submenu-arrow {
   color: #ffffff;
+  transform: translateX(3px);
 }
 
-/* Submenu */
-.submenu {
-  background: #282828;
-  border-left: 2px solid #ffffff;
-  margin-left: 26px;
-  overflow: hidden;
+/* Active state for menu headers */
+.menu-header.menu-active {
+  background: #3d3b3b !important;
+  border-right: 2px solid #ffffff;
 }
 
-/* Slide Transition */
-.slide-enter-active {
-  transition: all 0.2s ease;
-  max-height: 200px;
-}
-
-.slide-leave-active {
-  transition: all 0.2s ease;
-  max-height: 200px;
-}
-
-.slide-enter-from {
-  opacity: 0;
-  max-height: 0;
-}
-
-.slide-leave-to {
-  opacity: 0;
-  max-height: 0;
-}
-
-/* Submenu Items */
-.submenu-item {
-  border-radius: 0;
-  margin: 0;
-  min-height: 40px;
-  padding: 0 16px 0 14px;
-  transition: background-color 0.2s ease;
-}
-
-.submenu-item:hover {
-  background: #484644;
-}
-
-.submenu-active {
-  background: #ffffff !important;
-}
-
-.submenu-active .submenu-icon {
+.menu-header.menu-active .menu-icon,
+.menu-header.menu-active .menu-text,
+.menu-header.menu-active .submenu-arrow {
   color: #ffffff !important;
-}
-
-.submenu-active .submenu-text {
-  color: #ffffff !important;
-  font-weight: 500;
-}
-
-.submenu-icon {
-  color: rgba(255, 255, 255, 0.8) !important;
-  margin-right: -30px;
-  font-size: 18px;
-  transition: color 0.2s ease;
-}
-
-.submenu-text {
-  font-size: 13px;
-  color: #ffffff !important;
-  font-weight: 400;
 }
 
 /* Sidebar Footer */
@@ -527,43 +387,62 @@ watch(() => props.isRail, (newVal) => {
   border-radius: 2px;
 }
 
-.navigation-section::-webkit-scrollbar-thumb:hover {
-  background: #ffffff;
-}
-
-/* Remove Vuetify default styles */
-:deep(.v-list-item__prepend) {
-  margin-right: 12px;
-}
-
-:deep(.v-list-item__append) {
-  margin-left: 0;
-}
-
-:deep(.v-list-item__content) {
-  padding: 0;
-}
-
-/* Rail mode adjustments */
+/* Rail Mode Styles */
 :deep(.v-navigation-drawer--rail) .menu-text,
-:deep(.v-navigation-drawer--rail) .chevron,
-:deep(.v-navigation-drawer--rail) .submenu {
+:deep(.v-navigation-drawer--rail) .submenu-arrow,
+:deep(.v-navigation-drawer--rail) .submenu,
+:deep(.v-navigation-drawer--rail) .sidebar-footer,
+:deep(.v-navigation-drawer--rail) .logo-text {
   display: none !important;
 }
 
 :deep(.v-navigation-drawer--rail) .menu-item,
 :deep(.v-navigation-drawer--rail) .menu-header {
-  justify-content: center;
-  padding: 0 12px !important;
-  min-height: 44px;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+  min-height: 48px !important;
+}
+
+:deep(.v-navigation-drawer--rail) .v-list-item__prepend {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
 }
 
 :deep(.v-navigation-drawer--rail) .menu-icon {
   margin-right: 0 !important;
+  font-size: 22px !important;
+}
+
+:deep(.v-navigation-drawer--rail) .v-list-item__content,
+:deep(.v-navigation-drawer--rail) .v-list-item__append {
+  display: none !important;
+}
+
+:deep(.v-navigation-drawer--rail) .sidebar-header {
+  padding: 8px 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+:deep(.v-navigation-drawer--rail) .logo-section {
+  justify-content: center !important;
+  padding: 8px 0 !important;
+}
+
+:deep(.v-navigation-drawer--rail) .v-avatar {
+  margin-right: 0 !important;
+}
+
+/* In rail mode, tooltip still works for all items */
+:deep(.v-navigation-drawer--rail) .v-tooltip {
+  display: block !important;
 }
 
 /* Active state indicators */
-.menu-active::before {
+.menu-active::before,
+.menu-header.menu-active::before {
   content: '';
   position: absolute;
   left: 0;
@@ -573,21 +452,20 @@ watch(() => props.isRail, (newVal) => {
   background: #ffffff;
 }
 
-.submenu-active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.3);
-}
-
+/* Avatar image */
 .v-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover;   /* keeps proportions, crops if needed */
-  border-radius: 50%;  /* ensures circular fit */
+  object-fit: cover;
+  border-radius: 50%;
   display: block;
+}
+
+/* Fix for prepend slot */
+.v-list-item__prepend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 40px;
 }
 </style>

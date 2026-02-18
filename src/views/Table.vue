@@ -26,7 +26,7 @@
         @update:options="fetchUsers"
       >
 
-        <!-- ✅ CUSTOM HEADER ROW (NO v-slot modifiers) -->
+        <!-- CUSTOM HEADER ROW -->
         <template #headers="{ columns }">
           <tr>
             <th v-for="column in columns" :key="column.key">
